@@ -5,7 +5,7 @@
 <template>
 엔탑회's 놀이터
 
-<button @click="BE연동테스트">BE연동테스트</button>>
+<button @click="BE연동테스트">BE연동테스트</button>
 </template>
 
 <script setup>
