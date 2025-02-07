@@ -1,9 +1,11 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
+<style scoped>
+
+</style>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+엔탑회's 놀이터
 </template>
+
+<script setup>
+
+</script>
