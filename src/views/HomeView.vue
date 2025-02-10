@@ -4,15 +4,6 @@
 
 <template>
 엔탑회's 놀이터
-
-<input v-model="gameName" placeholder="닉네임"/>
-<input v-model="tagLine" placeholder="태그라인"/>
-<button @click="getWorstDamageDealer">마지막 게임 딜량 꼴등 찾기</button>
-
-<input type="text" v-model="userId">
-<input type="password" v-model="password">
-<button @click="signup">회원가입</button>
-
 </template>
 
 <script setup>
