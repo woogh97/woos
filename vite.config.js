@@ -12,6 +12,7 @@ export default defineConfig({
     vueDevTools(),
     VitePWA({
       registerType: "autoUpdate",
+      manifestFilename: "manifest.json",
       manifest: {
         name: "Son of NTOP",
         short_name: "SONT",
