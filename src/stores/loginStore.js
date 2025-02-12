@@ -41,6 +41,7 @@ export const useLoginStore = defineStore('login', () => {
           password: password,
         })
       });
+      debugger;
 
       const data = await res.json();
       isLogin.value = true;
