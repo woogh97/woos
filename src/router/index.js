@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
   const loginStore = useLoginStore();
 
   const isLogin = loginStore.getIsLogin();
-  if (!isLogin && (to.path !== '/login' || to.path !== '/signup')) {
+  if (!isLogin && to.path !== '/login' && to.path !== '/signup') {
     next('/login');
     return;
   }
