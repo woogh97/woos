@@ -15,10 +15,14 @@
 <script setup>
 import { ref } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
+import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
-// 로그인 스토어어
+// 로그인 스토어
 const loginStore = useLoginStore();
+
+// 라우터
+const router = useRouter();
 
 // 아이디
 const userId = ref();
@@ -33,7 +37,7 @@ const login = () => {
 
 // 회원가입 팝업 열기
 const openSignupPopup = () => {
-    new Swal('아직 안됨 ㅋ', '', 'warning');
+    router.push('/signup');
 }
 
 </script>

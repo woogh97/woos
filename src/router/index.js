@@ -16,7 +16,11 @@ const router = createRouter({
       path: '/main',
       name: 'Main',
       component: () => import('@/views/main/MainView.vue'),
-    }
+    }, {
+      path: '/signup',
+      name: 'Signup',
+      component: () => import('@/views/signup/Signup.vue'),
+    },
   ],
 })
 
@@ -24,7 +28,7 @@ router.beforeEach((to, from, next) => {
   const loginStore = useLoginStore();
 
   const isLogin = loginStore.getIsLogin();
-  if (!isLogin && to.path !== '/login') {
+  if (!isLogin && (to.path !== '/login' || to.path !== '/signup')) {
     next('/login');
     return;
   }
