@@ -42,6 +42,7 @@ export const useLoginStore = defineStore('login', () => {
         })
       });
 
+      debugger;
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.message);
