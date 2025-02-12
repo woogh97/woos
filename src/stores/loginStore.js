@@ -1,0 +1,96 @@
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { useRouter } from 'vue-router';
+
+export const useLoginStore = defineStore('login', () => {
+  // 라우터
+  const router = useRouter();
+
+  // 로그인 여부
+  const isLogin = ref(false);
+
+  // 유저정보
+  const userInfo = ref({});
+
+  // 유저정보 셋팅
+  const setUserInfo = (data) => {
+    userInfo.value = data;
+  }
+
+  // 유저정보 가져오기
+  const getUserInfo = () => {
+    return userInfo.value;
+  }
+
+  // 로그인 여부 가져오기
+  const getIsLogin = () => {
+    return isLogin.value;
+  }
+
+  // 로그인
+  const login = async (userId, password) => {
+    try {
+      isLogin.value = true;
+      userInfo.value = {
+        userId: userId,
+      };
+      router.push('/');
+    } catch (error) {
+      new Swal({
+        icon: 'error',
+        title: '로그인 실패',
+        text: error.message,
+      });
+    }
+  }
+
+  // 로그아웃
+  const logout = () => {
+    isLogin.value = false;
+    setUserInfo({});
+    router.push('/login');
+  }
+
+  // 회원가입
+  const signup = async (userId, password) => {
+    if (!userId || !password) {
+      new Swal({
+        icon: 'error',
+        title: '아이디와 비밀번호는 필수입니다.',
+      });
+      return;
+    }
+
+    try {
+      const res = await fetch(`https://a0kvtebzrb.execute-api.ap-southeast-2.amazonaws.com/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: userId,
+          password: password,
+        })
+      });
+  
+      const data = await res.json();
+
+      isLogin.value = true;
+      setUserInfo({
+        userId: data.userId,
+      });
+      router.push('/');
+    } catch (error) {
+      new Swal({
+        icon: 'error',
+        title: '회원가입 실패',
+        text: error.message,
+      });
+    }
+  }
+
+  return { userInfo, getUserInfo, login, logout, signup, getIsLogin };
+}, {
+  persist: true,
+})
