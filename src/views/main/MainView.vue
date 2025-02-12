@@ -23,7 +23,7 @@ const logout = () => {
 
 async function getWorstDamageDealer() {
   try {
-    const res = await fetch(`https://a0kvtebzrb.execute-api.ap-southeast-2.amazonaws.com/getWorstDamageDealer`, {
+    const res = await fetch(`https://35ffm6acpb.execute-api.ap-northeast-2.amazonaws.com/getWorstDamageDealer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

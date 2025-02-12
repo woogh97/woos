@@ -31,10 +31,20 @@ export const useLoginStore = defineStore('login', () => {
   // 로그인
   const login = async (userId, password) => {
     try {
+      const res = await fetch(`https://35ffm6acpb.execute-api.ap-northeast-2.amazonaws.com/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: userId,
+          password: password,
+        })
+      });
+
+      const data = await res.json();
       isLogin.value = true;
-      userInfo.value = {
-        userId: userId,
-      };
+      userInfo.value = data;
       router.push('/');
     } catch (error) {
       new Swal({
@@ -63,7 +73,7 @@ export const useLoginStore = defineStore('login', () => {
     }
 
     try {
-      const res = await fetch(`https://a0kvtebzrb.execute-api.ap-southeast-2.amazonaws.com/signup`, {
+      const res = await fetch(`https://35ffm6acpb.execute-api.ap-northeast-2.amazonaws.com/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
