@@ -69,11 +69,11 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   // 회원가입
-  const signup = async (userId, password) => {
-    if (!userId || !password) {
+  const signup = async (userId, password, userName) => {
+    if (!userId || !password || !userName) {
       new Swal({
         icon: 'error',
-        title: '아이디와 비밀번호는 필수입니다.',
+        title: '아이디와 비밀번호, 닉네임은 필수입니다.',
       });
       return;
     }
@@ -86,6 +86,7 @@ export const useLoginStore = defineStore('login', () => {
         },
         body: JSON.stringify({
           userId: userId,
+          userName: userName,
           password: password,
         })
       });
