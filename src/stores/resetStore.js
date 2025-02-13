@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { sfn_useLoginStore } from './loginStore';
+import { useLoginStore } from './loginStore';
 
 export default function resetStore({ store }) {
     const initialState = cloneDeep(store.$state);
@@ -7,6 +7,6 @@ export default function resetStore({ store }) {
 };
 
 export function reset() {
-    const loginStore = sfn_useLoginStore();
+    const loginStore = useLoginStore();
     loginStore.$reset();
 };

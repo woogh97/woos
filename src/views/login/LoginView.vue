@@ -4,6 +4,11 @@
     flex-direction: column;
     row-gap: 10px;
 }
+@media (min-width: 1024px) {
+    .login-wrap {
+        min-width: 300px;
+    }
+}
 .txt-wrap {
     display: flex;
     justify-content: flex-end;
@@ -36,7 +41,6 @@
                 <a @click="goToSignup" class="signup-txt">회원가입</a>
             </div>
         </div>
-        <!-- <woo-button @click="openSignupPopup">회원가입</woo-button> -->
     </div>
 </template>
 

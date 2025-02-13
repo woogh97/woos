@@ -4,6 +4,11 @@
     flex-direction: column;
     row-gap: 10px;
 }
+@media (min-width: 1024px) {
+    .signup-wrap {
+        min-width: 300px;
+    }
+}
 .txt-wrap {
     display: flex;
     justify-content: flex-end;
