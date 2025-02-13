@@ -4,6 +4,14 @@
     flex-direction: column;
     row-gap: 10px;
 }
+.txt-wrap {
+    display: flex;
+    justify-content: flex-end;
+}
+.txt-wrap > div:not(:first-child)::before {
+    content: '│';
+    padding: 2px;
+}
 .signup-txt:hover {
     display: inline-block;
     text-decoration: underline;
@@ -17,8 +25,16 @@
         <woo-input v-model="userId" placeholder="아이디"/>
         <woo-input type="password" v-model="password" placeholder="비밀번호"/>
         <woo-button @click="login">로그인</woo-button>
-        <div>
-            <a @click="openSignupPopup" class="signup-txt">회원가입</a>
+        <div class="txt-wrap">
+            <div>
+                <a @click="아이디찾기" class="signup-txt">아이디 찾기</a>
+            </div>
+            <div>
+                <a @click="비밀번호찾기" class="signup-txt">비밀번호 찾기</a>
+            </div>
+            <div>
+                <a @click="goToSignup" class="signup-txt">회원가입</a>
+            </div>
         </div>
         <!-- <woo-button @click="openSignupPopup">회원가입</woo-button> -->
     </div>
@@ -49,9 +65,17 @@ const login = () => {
     loginStore.login(userId.value, password.value);
 }
 
-// 회원가입 팝업 열기
-const openSignupPopup = () => {
+// 회원가입 페이지로 이동
+const goToSignup = () => {
     router.push('/signup');
+}
+
+const 아이디찾기 = () => {
+    new Swal('아직 안되지요~', '', '');
+}
+
+const 비밀번호찾기 = () => {
+    new Swal('아직 안되지요~', '', '');
 }
 
 </script>
