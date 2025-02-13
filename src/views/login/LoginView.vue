@@ -1,14 +1,26 @@
-<style scoped lang='scss'>
-
+<style scoped>
+.login-wrap {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+.signup-txt:hover {
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+}
 </style>
 
 <template>
-    <div>
+    <div class="login-wrap">
         <h1>로그인</h1>
-        <input type="text" placeholder="아이디" v-model="userId"/>
-        <input type="password" placeholder="비밀번호" v-model="password"/>
-        <button @click="login">로그인</button>
-        <button @click="openSignupPopup">회원가입</button>
+        <woo-input v-model="userId" placeholder="아이디"/>
+        <woo-input type="password" v-model="password" placeholder="비밀번호"/>
+        <woo-button @click="login">로그인</woo-button>
+        <div>
+            <a @click="openSignupPopup" class="signup-txt">회원가입</a>
+        </div>
+        <!-- <woo-button @click="openSignupPopup">회원가입</woo-button> -->
     </div>
 </template>
 
@@ -17,6 +29,8 @@ import { ref } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import wooInput from '@/components/element/WooInput.vue';
+import wooButton from '@/components/element/WooButton.vue';
 
 // 로그인 스토어
 const loginStore = useLoginStore();

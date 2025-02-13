@@ -15,6 +15,12 @@
   --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
   --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
 
+  --vt-c-button-light: #f3f3f3;
+  --vt-c-button-dark: #444444;
+
+  --vt-c-input-light: #f3f3f3;
+  --vt-c-input-dark: #25251d;
+
   --vt-c-text-light-1: var(--vt-c-indigo);
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
@@ -33,6 +39,9 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
+  --color-input-background: var(--vt-c-input-light);
+  --color-button-background: var(--vt-c-button-light);
+
   --section-gap: 160px;
 }
 
@@ -47,6 +56,9 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+
+    --color-input-background: var(--vt-c-input-dark);
+    --color-button-background: var(--vt-c-button-dark);
   }
 }
 

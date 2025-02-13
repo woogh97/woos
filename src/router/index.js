@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/main/MainView.vue'
 import { useLoginStore } from "@/stores/loginStore";
 
 const router = createRouter({
