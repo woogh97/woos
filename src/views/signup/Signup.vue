@@ -6,9 +6,10 @@
     <div>
         <input v-model="userId" placeholder="아이디">
         <input type="password" v-model="password" placeholder="비밀번호">
+        <input v-model="userName" placeholder="닉네임">
         <input type="text" v-model="정답" placeholder="주인장 이름은?">
         <button @click="signup">회원가입</button>
-    </div>    
+    </div>
 </template>
 
 <script setup>
@@ -18,6 +19,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 const userId = ref();
 const password = ref();
+const userName = ref();
 const 정답 = ref();
 
 const loginStore = useLoginStore();
@@ -29,7 +31,7 @@ const signup = async () => {
     }
 
     try {
-        await loginStore.signup(userId.value, password.value);
+        await loginStore.signup(userId.value, password.value, userName.value);
     } catch (error) {
         new Swal('회원가입 실패', error.message, 'warning');
     }

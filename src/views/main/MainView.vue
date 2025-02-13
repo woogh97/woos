@@ -3,7 +3,7 @@
 </style>
 
 <template>
-엔탑회's {{ userId }} 놀이터
+엔탑회's {{ userName }} 놀이터
 <button @click="logout">로그아웃</button>
 </template>
 
@@ -12,7 +12,7 @@ import { computed, ref } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
 
 const loginStore = useLoginStore();
-const userId = computed(() => loginStore.getUserInfo().userId);
+const userName = computed(() => loginStore.getUserInfo().userName);
 
 const gameName = ref();
 const tagLine = ref();
