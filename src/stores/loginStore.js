@@ -94,10 +94,8 @@ export const useLoginStore = defineStore('login', () => {
       const data = await res.json();
 
       isLogin.value = true;
-      setUserInfo({
-        userId: data.userId,
-        userName: data.userName,
-      });
+      const { userId, userName } = data.user;
+      setUserInfo({ userId, userName });
       router.push('/');
     } catch (error) {
       new Swal({
