@@ -12,7 +12,7 @@
 </style>
 
 <template>
-    <div class="login-wrap">
+    <div class="login-wrap" @keydown.enter="login">
         <h1>로그인</h1>
         <woo-input v-model="userId" placeholder="아이디"/>
         <woo-input type="password" v-model="password" placeholder="비밀번호"/>
