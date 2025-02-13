@@ -2,7 +2,7 @@
 .woo-input {
   border-radius: 5px;
   border: 1px solid rgb(160, 160, 160);
-  padding: 5px;
+  padding: 10px;
   background-color: var(--color-background);
   color: var(--color-text);
 }
