@@ -49,7 +49,7 @@ export const useLoginStore = defineStore('login', () => {
       
       const data = await res.json();
       isLogin.value = true;
-      userInfo.value = data.user;
+      userInfo.value = { userId: data.userId, userName: data.userName };
       router.push('/');
     } catch (error) {
       new Swal({
