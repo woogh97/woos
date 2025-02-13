@@ -42,7 +42,6 @@ export const useLoginStore = defineStore('login', () => {
         })
       });
 
-      debugger;
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.message);
@@ -50,7 +49,7 @@ export const useLoginStore = defineStore('login', () => {
       
       const data = await res.json();
       isLogin.value = true;
-      userInfo.value = data;
+      userInfo.value = data.user;
       router.push('/');
     } catch (error) {
       new Swal({
@@ -90,11 +89,13 @@ export const useLoginStore = defineStore('login', () => {
           password: password,
         })
       });
-  
-      const data = await res.json();
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
 
       isLogin.value = true;
-      const { userId, userName } = data.user;
       setUserInfo({ userId, userName });
       router.push('/');
     } catch (error) {
