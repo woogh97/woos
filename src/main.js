@@ -11,7 +11,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 // pinia
-import pinia from '@/assets/pinia.js';
+import pinia from '@/assets/js/pinia.js';
 
 const app = createApp(App)
 app.use(pinia)
