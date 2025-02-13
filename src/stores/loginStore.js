@@ -96,6 +96,7 @@ export const useLoginStore = defineStore('login', () => {
       isLogin.value = true;
       setUserInfo({
         userId: data.userId,
+        userName: data.userName,
       });
       router.push('/');
     } catch (error) {
