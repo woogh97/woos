@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { useRouter } from 'vue-router';
@@ -7,11 +7,11 @@ export const useLoginStore = defineStore('login', () => {
   // 라우터
   const router = useRouter();
 
-  // 로그인 여부
-  const isLogin = ref(false);
-
   // 유저정보
   const userInfo = ref({});
+
+  // 로그인 여부
+  const isLogin = computed(() => !!userInfo.value.userId);
 
   // 유저정보 셋팅
   const setUserInfo = (data) => {
@@ -48,7 +48,6 @@ export const useLoginStore = defineStore('login', () => {
       }
       
       const data = await res.json();
-      isLogin.value = true;
       userInfo.value = { userId: data.userId, userName: data.userName };
       router.push('/');
     } catch (error) {
@@ -62,7 +61,6 @@ export const useLoginStore = defineStore('login', () => {
 
   // 로그아웃
   const logout = () => {
-    isLogin.value = false;
     setUserInfo({});
     router.push('/login');
   }
@@ -95,7 +93,6 @@ export const useLoginStore = defineStore('login', () => {
         throw new Error(data.message);
       }
 
-      isLogin.value = true;
       setUserInfo({ userId, userName });
       router.push('/');
     } catch (error) {
