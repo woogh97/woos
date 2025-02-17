@@ -13,7 +13,7 @@
 .popup {
     width: 300px;
     height: 300px;
-    background-color: white;
+    background-color: var(--color-background-soft);
     border-radius: 10px;
     padding: 20px;
     display: flex;
@@ -51,8 +51,11 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 import wooInput from '@/components/element/WooInput.vue';
 import wooButton from '@/components/element/WooButton.vue';
 import { getDbOrigin } from '@/assets/js/api';
+import { useLoginStore } from '@/stores/loginStore';
 
 const emit = defineEmits(['reSearch']);
+
+const loginStore = useLoginStore();
 
 const gameName = ref('');
 const tagLine = ref('');
