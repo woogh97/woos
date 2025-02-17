@@ -42,7 +42,7 @@
     <div class="user-wrap">
         <div class="profile-image-wrap">
             <div class="profile-image">
-                <img src="https://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/588.png" alt="profile" width="64" height="64"/>
+                <img :src="profileImageUrl" alt="profile" width="64" height="64"/>
             </div>
         </div>
         <div class="nick-name">
@@ -97,6 +97,21 @@ const getSummoners = async () => {
         console.error(error);
     }
 }
+
+const profileImageUrl = ref('');
+
+watch(currentSummoner, async () => {
+    if (!currentSummoner.value.puuid) {
+        return;
+    }
+
+    const dbOrigin = getDbOrigin();
+    const [data, versions] = await Promise.all([fetch(`${dbOrigin}/getSummonerDetail?puuid=${currentSummoner.value.puuid}`).then(res => res.json()), fetch("https://ddragon.leagueoflegends.com/api/versions.json").then(res => res.json())])
+    const latestVersion = versions[0]; // 최신 패치 버전
+
+    // 프로필 아이콘 URL 생성
+    profileImageUrl.value = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/${data.profileIconId}.png`;
+})
 
 const setNewSummoners = async (puuid) => {
     await getSummoners();
