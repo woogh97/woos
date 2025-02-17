@@ -36,22 +36,26 @@
     text-decoration: underline;
     cursor: pointer;
 }
+.current-summoner-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 </style>
 
 <template>
     <div class="user-wrap">
         <div class="profile-image-wrap">
             <div class="profile-image">
-                <img :src="profileImageUrl" alt="profile" width="64" height="64"/>
+                <img v-show="!currentSummoner.profileImageUrl" :src="defaultProfileIconUrl" alt="profile" width="64" height="64"/>
+                <img v-show="currentSummoner.profileImageUrl" :src="currentSummoner.profileImageUrl" alt="profile" width="64" height="64"/>
             </div>
         </div>
-        <div class="nick-name">
-            {{ userName }}
+        <div class="current-summoner-wrap">
+            <div>{{ currentSummoner.summonerLevel }}레벨</div>
+            <div>{{ currentSummoner.summonerName }}</div>
         </div>
         <div class="summoner-wrap">
-            <div class="current-summoner">
-                {{ currentSummoner.summonerName }}
-            </div>
             <div class="new-summoner-wrap">
                 <select class="summoner-select" v-model="currentSummoner">
                     <option v-for="summoner in mySummoners" :value="summoner">
@@ -69,19 +73,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
 import { getDbOrigin } from '@/assets/js/api';
 import AddNewSummonerPopup from '@/components/user/AddNewSummonerPopup.vue';
 
 const loginStore = useLoginStore();
-const userName = computed(() => loginStore.getUserInfo().userName);
 
 const currentSummoner = ref({});
 const mySummoners = ref([]);
 const addNewSummonerPopup = ref();
 
 onMounted(() => {
+    getDefaultProfileIconUrl();
     getSummoners();
 });
 
@@ -98,20 +102,33 @@ const getSummoners = async () => {
     }
 }
 
-const profileImageUrl = ref('');
-
 watch(currentSummoner, async () => {
-    if (!currentSummoner.value.puuid) {
+    if (currentSummoner.value.hasDetailData) {
         return;
     }
+    getSummonerDetail(currentSummoner.value);
+})
 
-    const dbOrigin = getDbOrigin();
-    const [data, versions] = await Promise.all([fetch(`${dbOrigin}/getSummonerDetail?puuid=${currentSummoner.value.puuid}`).then(res => res.json()), fetch("https://ddragon.leagueoflegends.com/api/versions.json").then(res => res.json())])
+const defaultProfileIconUrl = ref('');
+async function getDefaultProfileIconUrl() {
+    // 최신 버전 가져오기
+    const versions = await fetch("https://ddragon.leagueoflegends.com/api/versions.json")
+        .then(res => res.json());
+    
     const latestVersion = versions[0]; // 최신 패치 버전
 
-    // 프로필 아이콘 URL 생성
-    profileImageUrl.value = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/${data.profileIconId}.png`;
-})
+    // 기본 프로필 아이콘 URL 생성 (ID: 29)
+    defaultProfileIconUrl.value = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/29.png`;
+}
+
+const getSummonerDetail = async (currentSummoner) => {
+    const dbOrigin = getDbOrigin();
+    const [data, versions] = await Promise.all([fetch(`${dbOrigin}/getSummonerDetail?puuid=${currentSummoner.puuid}`).then(res => res.json()), fetch("https://ddragon.leagueoflegends.com/api/versions.json").then(res => res.json())])
+    const latestVersion = versions[0]; // 최신 패치 버전
+
+    const profileImageUrl = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/${data.profileIconId}.png`;
+    Object.assign(currentSummoner, { ...data, profileImageUrl, hasDetailData: true });
+}
 
 const setNewSummoners = async (puuid) => {
     await getSummoners();

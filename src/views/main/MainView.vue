@@ -1,11 +1,30 @@
 <style scoped>
-
+.txt-wrap {
+    display: flex;
+    justify-content: flex-end;
+    font-size: small;
+}
+.a-txt:hover {
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 10px;
+}
 </style>
 
 <template>
+  <div class="header-wrap">
+    <div>{{ userName }}</div>
+    <div class="txt-wrap">
+      <a @click="logout" class="a-txt">로그아웃</a>
+    </div>
+  </div>
   <MyAccount />
-엔탑회's {{ userName }} 놀이터
-<button @click="logout">로그아웃</button>
 </template>
 
 <script setup>
