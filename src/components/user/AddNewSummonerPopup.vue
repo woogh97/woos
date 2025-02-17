@@ -88,8 +88,8 @@ const addSummoner = async () => {
     try {
         const userId = loginStore.getUserInfo().userId;
         const puuid = currentSummoner.value.puuid;
-        const summonerName = currentSummoner.value.summonerName;
-        const tagName = currentSummoner.value.tagName;
+        const summonerName = currentSummoner.value.gameName;
+        const tagName = currentSummoner.value.tagLine;
 
         const dbOrigin = getDbOrigin();
         const res = await fetch(`${dbOrigin}/addNewSummoner`, {
