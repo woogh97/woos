@@ -89,8 +89,7 @@ const getSummoners = async () => {
     const dbOrigin = getDbOrigin();
     const userId = loginStore.getUserInfo().userId;
     try {
-        const queryParam = new URLSearchParams({ userId });
-        const res = await fetch(`${dbOrigin}/getSummoners${queryParam}`);
+        const res = await fetch(`${dbOrigin}/getSummoners?userId=${userId}`);
         const data = await res.json();
         mySummoners.value = data;
     } catch (error) {
