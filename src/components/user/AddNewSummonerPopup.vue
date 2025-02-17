@@ -33,12 +33,12 @@
             <h1>새로운 소환사 추가</h1>
             <div v-if="!canAddSummoner" class="search-wrap">
                 <woo-input v-model="gameName" placeholder="소환사명"/>
-                <woo-input v-model="tagLine" placeholder="태그라인"/>
+                <woo-input v-model="tagLine" placeholder="태그라인 #제외"/>
             </div>
             <div v-else class="search-wrap">
                 <span>{{ currentSummoner }}</span>
             </div>
-            <woo-button v-if="!canAddSummoner"@click="searchSummoner" :isLoading="isSearching">찾기</woo-button>
+            <woo-button v-if="!canAddSummoner" @click="searchSummoner" :isLoading="isSearching">찾기</woo-button>
             <woo-button v-else @click="addSummoner">추가</woo-button>
             <woo-button @click="closePopup">닫기</woo-button>
         </div>
