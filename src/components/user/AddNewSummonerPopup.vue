@@ -38,7 +38,7 @@
             <div v-else class="search-wrap">
                 <span>{{ currentSummoner }}</span>
             </div>
-            <woo-button v-if="!canAddSummoner"@click="searchSummoner">찾기</woo-button>
+            <woo-button v-if="!canAddSummoner"@click="searchSummoner" :isLoading="isSearching">찾기</woo-button>
             <woo-button v-else @click="addSummoner">추가</woo-button>
             <woo-button @click="closePopup">닫기</woo-button>
         </div>
@@ -63,8 +63,11 @@ const tagLine = ref('');
 const canAddSummoner = computed(() => !!currentSummoner.value.puuid);
 
 const currentSummoner = ref({});
+
+const isSearching = ref(false);
 const searchSummoner = async () => {
     try {
+        isSearching.value = true;
         const dbOrigin = getDbOrigin();
         const res = await fetch(`${dbOrigin}/getNewSummoner`, {
             method: 'POST',
@@ -81,6 +84,8 @@ const searchSummoner = async () => {
         currentSummoner.value = data;
     } catch (error) {
         new Swal('소환사 검색 실패', error.message, 'warning');
+    } finally {
+        isSearching.value = false;
     }
 }
 
