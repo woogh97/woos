@@ -3,6 +3,7 @@
 </style>
 
 <template>
+  <MyAccount />
 엔탑회's {{ userName }} 놀이터
 <button @click="logout">로그아웃</button>
 </template>
@@ -10,6 +11,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
+import MyAccount from '@/components/user/MyAccount.vue';
 
 const loginStore = useLoginStore();
 const userName = computed(() => loginStore.getUserInfo().userName);
