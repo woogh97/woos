@@ -92,6 +92,7 @@ const getSummoners = async () => {
         const res = await fetch(`${dbOrigin}/getSummoners?userId=${userId}`);
         const data = await res.json();
         mySummoners.value = data;
+        currentSummoner.value = data[0] ?? { summonerName: '소환사 계정을 추가해주세요.' };
     } catch (error) {
         console.error(error);
     }
