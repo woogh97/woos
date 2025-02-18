@@ -36,7 +36,7 @@
                 <woo-input v-model="tagLine" placeholder="태그라인 #제외"/>
             </div>
             <div v-else class="search-wrap">
-                <span>{{ currentSummoner }}</span>
+                <span>{{ currentSummoner.gameName }}#{{ currentSummoner.tagLine }} 계정 확인 완료</span>
             </div>
             <woo-button v-if="!canAddSummoner" @click="searchSummoner" :isLoading="isSearching">찾기</woo-button>
             <woo-button v-else @click="addSummoner">추가</woo-button>
@@ -63,6 +63,12 @@ const tagLine = ref('');
 const canAddSummoner = computed(() => !!currentSummoner.value.puuid);
 
 const currentSummoner = ref({});
+
+const resetInput = () => {
+    gameName.value = '';
+    tagLine.value = '';
+    currentSummoner.value = {};
+}
 
 const isSearching = ref(false);
 const searchSummoner = async () => {
@@ -130,6 +136,7 @@ const openPopup = () => {
 }
 
 const closePopup = () => {
+    resetInput();
     showPopup.value = false;
 }
 
