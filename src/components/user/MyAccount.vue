@@ -38,22 +38,34 @@
 }
 .current-summoner-wrap {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    column-gap: 10px;
+}
+.current-summoner-info {
+    display: flex;
+    flex-direction: column;
+}
+.current-summoner-info-level {
+    font-size: medium;
+}
+.current-summoner-info-name {
+    font-size: large;
 }
 </style>
 
 <template>
     <div class="user-wrap">
-        <div class="profile-image-wrap">
-            <div class="profile-image">
-                <img v-show="!currentSummoner.profileImageUrl" :src="defaultProfileIconUrl" alt="profile" width="64" height="64"/>
-                <img v-show="currentSummoner.profileImageUrl" :src="currentSummoner.profileImageUrl" alt="profile" width="64" height="64"/>
-            </div>
-        </div>
         <div class="current-summoner-wrap">
-            <div>{{ currentSummoner.summonerLevel }}레벨</div>
-            <div>{{ currentSummoner.summonerName }}</div>
+            <div class="profile-image-wrap">
+                <div class="profile-image">
+                    <img v-show="!currentSummoner.profileImageUrl" :src="defaultProfileIconUrl" alt="profile" width="64" height="64"/>
+                    <img v-show="currentSummoner.profileImageUrl" :src="currentSummoner.profileImageUrl" alt="profile" width="64" height="64"/>
+                </div>
+            </div>
+            <div class="current-summoner-info">
+                <div class="current-summoner-info-level">{{ currentSummoner.summonerLevel }}레벨</div>
+                <div class="current-summoner-info-name">{{ currentSummoner.summonerName }}</div>
+            </div>
         </div>
         <div class="summoner-wrap">
             <div class="new-summoner-wrap">

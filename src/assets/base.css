@@ -43,9 +43,14 @@
   --color-button-background: var(--vt-c-button-light);
 
   --section-gap: 160px;
+  
 }
 
-@media (prefers-color-scheme: dark) {
+:root {
+  --header-height: 60px;
+}
+
+@media (prefers-color-scheme: light) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
