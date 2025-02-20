@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+    padding: 20px;
 }
 @media (min-width: 1024px) {
     .login-wrap {
