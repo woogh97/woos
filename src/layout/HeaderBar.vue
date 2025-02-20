@@ -1,7 +1,6 @@
 <style scoped>
 .header-wrap {
-    /* background-color: #0c0f17; */
-    padding: 20px;
+    padding: 10px 20px;
     border-bottom: 2px solid var(--color-border);
     display: flex;
     height: var(--header-height);
@@ -28,6 +27,7 @@
 <template>
     <header class="header-wrap">
         <div class="user-info-wrap">
+            <dark-mode-btn></dark-mode-btn>
             <div>{{ userName }}</div>
             <div class="txt-wrap">
             <a @click="logout" class="a-txt">로그아웃</a>
@@ -39,6 +39,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
+import DarkModeBtn from '@/components/element/DarkModeBtn.vue';
 
 const loginStore = useLoginStore();
 const userName = computed(() => loginStore.getUserInfo().userName);
@@ -46,4 +47,5 @@ const userName = computed(() => loginStore.getUserInfo().userName);
 const logout = () => {
   loginStore.logout();
 }
+
 </script>
