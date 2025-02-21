@@ -26,6 +26,9 @@
 
 <template>
     <header class="header-wrap">
+        <div>
+            <GameStart></GameStart>
+        </div>
         <div class="user-info-wrap">
             <dark-mode-btn></dark-mode-btn>
             <div>{{ userName }}</div>
@@ -40,6 +43,7 @@
 import { computed } from 'vue'
 import { useLoginStore } from '@/stores/loginStore';
 import DarkModeBtn from '@/components/element/DarkModeBtn.vue';
+import GameStart from '@/components/game/GameStart.vue';
 
 const loginStore = useLoginStore();
 const userName = computed(() => loginStore.getUserInfo().userName);
