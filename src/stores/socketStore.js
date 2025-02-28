@@ -6,10 +6,11 @@ export const useSocketStore = defineStore('socket', () => {
   let socket = null;
 
   const connectSocket = () => {
-    const userInfo = loginStore.getUserInfo();
-    socket = new WebSocket(`wss://2ker7kkj7f.execute-api.ap-northeast-2.amazonaws.com/production/?userId=${userInfo.userId}`);
+    socket = new WebSocket(`wss://2ker7kkj7f.execute-api.ap-northeast-2.amazonaws.com/production`);
     socket.onopen = () => {
+      const userInfo = loginStore.getUserInfo();
       console.log('WebSocket connected');
+      socket.send(JSON.stringify({ action: 'registerUser', userId: userInfo.userId }));
     }
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
