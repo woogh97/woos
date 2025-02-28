@@ -7,7 +7,7 @@ export const useSocketStore = defineStore('socket', () => {
 
   const connectSocket = () => {
     const userInfo = loginStore.getUserInfo();
-    socket = new WebSocket(`wss://2ker7kkj7f.execute-api.ap-northeast-2.amazonaws.com?userId=${userInfo.userId}`);
+    socket = new WebSocket(`wss://2ker7kkj7f.execute-api.ap-northeast-2.amazonaws.com/production/?userId=${userInfo.userId}`);
     socket.onopen = () => {
       console.log('WebSocket connected');
     }
