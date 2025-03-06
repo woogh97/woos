@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useLoginStore } from './loginStore';
+import { getDbOrigin } from '@/assets/js/api';
 
 export const useSocketStore = defineStore('socket', () => {
   const loginStore = useLoginStore();
@@ -31,9 +32,25 @@ export const useSocketStore = defineStore('socket', () => {
     }
   }
 
-  const sendMessage = (receiverId, message) => {
+  const sendMessage = async (receiverId, message) => {
     const userInfo = loginStore.getUserInfo();
-    socket.send(JSON.stringify({ receiverId, userId: userInfo.userId, message }));
+    const dbOrigin = getDbOrigin();
+
+    const res = await fetch(`${dbOrigin}/saveMessageAndGetConnectionId`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        receiverId,
+        userId: userInfo.userId,
+        message,
+      })
+    });
+
+    const { connectionId } = await res.json();
+
+    socket.send(JSON.stringify({ connectionId, userId: userInfo.userId, message }));
   }
 
   return { socket, connectSocket, sendMessage };
