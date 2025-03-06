@@ -50,7 +50,9 @@ export const useSocketStore = defineStore('socket', () => {
 
     const { connectionId } = await res.json();
 
-    socket.send(JSON.stringify({ connectionId, userId: userInfo.userId, message }));
+    if (connectionId) {
+      socket.send(JSON.stringify({ connectionId, userId: userInfo.userId, message }));
+    }
   }
 
   return { socket, connectSocket, sendMessage };
