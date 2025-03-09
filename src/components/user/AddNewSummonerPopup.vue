@@ -12,7 +12,6 @@
 }
 .popup {
     width: 300px;
-    height: 300px;
     background-color: var(--color-background-soft);
     border-radius: 10px;
     padding: 20px;

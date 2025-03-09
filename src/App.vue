@@ -1,11 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { useSocketStore } from './stores/socketStore';
 import { ref } from 'vue';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-
-const socketStore = useSocketStore();
-socketStore.connectSocket();
 
 const beforeInstallPrompt = ref(null);
 window.addEventListener('beforeinstallprompt', (e) => {

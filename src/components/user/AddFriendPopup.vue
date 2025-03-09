@@ -12,7 +12,6 @@
 }
 .popup {
     width: 300px;
-    height: 300px;
     background-color: var(--color-background-soft);
     border-radius: 10px;
     padding: 20px;
@@ -55,8 +54,7 @@ const friendId = ref('');
 const currentSummoner = ref({});
 
 const resetInput = () => {
-    gameName.value = '';
-    tagLine.value = '';
+    friendId.value = '';
     currentSummoner.value = {};
 }
 
@@ -65,7 +63,7 @@ const addFriend = async () => {
         const userId = loginStore.getUserInfo().userId;
 
         const dbOrigin = getDbOrigin();
-        await fetch(`${dbOrigin}/addFriend`, {
+        const res = await fetch(`${dbOrigin}/addFriend`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -73,6 +71,19 @@ const addFriend = async () => {
             body: JSON.stringify({ userId, friendId: friendId.value })
         });
 
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data);
+        }
+
+        new Swal({
+            title: '친구 추가 요청',
+            text: '친구 추가 요청을 보냈습니다.',
+            icon: 'success',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        });
         closePopup();
     } catch (error) {
         new Swal(error.message, '', 'warning');
