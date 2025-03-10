@@ -21,9 +21,9 @@
                         <span>{{ friend.status }}</span>
                     </div>
                 </li>
-                <li v-if="friends.length === 0">
+                <li v-if="friends.filter(it => it.user_id !== userId).length === 0">
                     <div>
-                        <span>아무무 입니다.</span>
+                        <span>아무무 입니까?</span>
                     </div>
                 </li>
             </ul>
