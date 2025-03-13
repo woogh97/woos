@@ -1,27 +1,48 @@
 <style scoped lang='scss'>
-
+.friend-cont {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    .friend-wrap {
+        padding: 10px 5px;
+        border: 2px solid #b3b3b3;
+        border-radius: 5px;
+        background-color: var(--color-background-soft);
+        .friend-pending-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .friend-btn-wrap {
+                display: flex;
+                column-gap: 5px;
+            }
+        }
+    }
+}
 </style>
 
 <template>
-    <div>
+    <div class="friend-cont">
         <div>
             <woo-button @click="openAddFriendPopup">대충 친추 버튼</woo-button>
             <add-friend-popup ref="addFriendPopup"></add-friend-popup>
         </div>
         <div>
             <ul>
-                <li v-for="friend in friends" :key="friend.id">
-                    <div v-if="friend.user_id === userId && friend.status === 'pending'">
-                        <span>{{ friend.name }}</span>
-                        <woo-button @click="acceptFriend(friend.user_id)">수락</woo-button>
-                        <woo-button @click="rejectFriend(friend.user_id)">거절</woo-button>
+                <li class="friend-wrap" v-for="friend in friends" :key="friend.id">
+                    <div class="friend-pending-wrap" v-if="friend.user_id === userId && friend.status === 'pending'">
+                        <span class="friend-pending-name">{{ friend.name }}</span>
+                        <div class="friend-btn-wrap">
+                            <woo-button @click="acceptFriend(friend.user_id)">수락</woo-button>
+                            <woo-button @click="rejectFriend(friend.user_id)">거절</woo-button>
+                        </div>
                     </div>
-                    <div v-else>
-                        <span>{{ friend.name }}</span>
-                        <span>{{ friend.status }}</span>
+                    <div class="friend-accepted-wrap" v-else-if="friend.status === 'accepted'">
+                        <div class="friend-profile"></div>
+                        <span class="friend-name">{{ friend.name }}</span>
                     </div>
                 </li>
-                <li v-if="friends.filter(it => it.user_id !== userId).length === 0">
+                <li class="amumu-wrap" v-if="friends.filter(it => it.user_id !== userId && it.status === 'accepted').length === 0">
                     <div>
                         <span>아무무 입니까?</span>
                     </div>
@@ -67,12 +88,12 @@ getFriends();
 const acceptFriend = async (friendId) => {
     try {
         const dbOrigin = getDbOrigin();
-        const res = await fetch(`${dbOrigin}/acceptFriend`, {
+        const res = await fetch(`${dbOrigin}/changeFriendStatus`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId: userId.value, friendId })
+            body: JSON.stringify({ userId: userId.value, friendId, status: 'accepted' })
         });
 
         if (!res.ok) {
@@ -89,12 +110,12 @@ const acceptFriend = async (friendId) => {
 const rejectFriend = async (friendId) => {
     try {
         const dbOrigin = getDbOrigin();
-        const res = await fetch(`${dbOrigin}/rejectFriend`, {
+        const res = await fetch(`${dbOrigin}/changeFriendStatus`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId: userId.value, friendId })
+            body: JSON.stringify({ userId: userId.value, friendId, status: 'reject' })
         });
 
         if (!res.ok) {
