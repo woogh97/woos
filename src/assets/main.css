@@ -1,7 +1,6 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
   font-weight: normal;
   display: flex;
@@ -18,26 +17,6 @@
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    grid-template-rows: auto 1fr;
-    max-width: none;
     width: 100%;
-  }
-
-  #app > header {
-    grid-column: span 2; /* 헤더가 전체 가로를 차지하게 설정 */
-  }
-
-  #app > aside {
-    grid-column: 2; /* 두 번째 컬럼(오른쪽)에 위치 */
-    grid-row: 2; /* 두 번째 행(헤더 아래)에 위치 */
-    border-left: 2px solid var(--color-border); /* 왼쪽에 선 추가 */
-  }
-
-  #app > .content-wrap {
-    flex: unset; /* 기존 flex 속성 제거 */
-    grid-column: 1; /* 첫 번째 컬럼(왼쪽)에 위치 */
-    grid-row: 2; /* 두 번째 행(헤더 아래)에 위치 */
   }
 }
