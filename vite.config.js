@@ -14,8 +14,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       manifestFilename: "manifest.json",
       manifest: {
-        name: "Son of NTOP",
-        short_name: "SONT",
+        name: "Woo's word",
+        short_name: "WOO",
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",

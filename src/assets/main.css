@@ -5,18 +5,13 @@
   font-weight: normal;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 #app > .content-wrap {
   flex: 1;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-  }
-
-  #app {
-    width: 100%;
-  }
+body {
+  display: flex;
 }
