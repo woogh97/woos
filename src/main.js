@@ -11,8 +11,17 @@ import { registerSW } from 'virtual:pwa-register'
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+import { getConsent } from './assets/js/lib/consent';
+import { loadClarity } from './assets/js/lib/clarity';
+
 // pinia
 import pinia from '@/assets/js/pinia.js';
+
+const clarityProjectId = import.meta.env.VITE_CLARITY_PROJECT_ID;
+const consent = getConsent();
+if (consent.analytics === true) {
+  loadClarity(clarityProjectId);
+}
 
 const app = createApp(App)
 app.use(pinia)

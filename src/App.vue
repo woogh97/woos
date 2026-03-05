@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { ref } from 'vue';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import ClarityConsent from './components/clarity/ClarityConsent.vue';
 
 const beforeInstallPrompt = ref(null);
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -24,6 +25,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 <template>
   <RouterView />
+  <ClarityConsent />
 </template>
 
 <style scoped>
