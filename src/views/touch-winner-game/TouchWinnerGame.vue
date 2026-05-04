@@ -1,17 +1,5 @@
 <template>
   <div class="touch-winner-game">
-    <div class="top-panel">
-      <div>
-        <h3>손가락을 화면에 올려주세요</h3>
-        <p>
-          참가자들이 동시에 터치하면 아이콘이 표시되고,
-          {{ pickDelaySeconds }}초 뒤 터치 중인 사람 중 한 명이 당첨됩니다.
-        </p>
-      </div>
-
-      <button class="reset-btn" type="button" @click="resetGame">초기화</button>
-    </div>
-
     <div class="status-panel">
       <div class="status-item">
         <span class="label">참가자</span>
@@ -25,6 +13,7 @@
         <span class="label">남은 시간</span>
         <strong>{{ countdownText }}</strong>
       </div>
+      <button class="reset-btn" type="button" @click="resetGame">초기화</button>
     </div>
 
     <div
@@ -38,12 +27,10 @@
       @lostpointercapture="handlePointerUp"
       @contextmenu.prevent
     >
-      <div v-if="!touchPoints.length && !winner" class="empty-guide">
-        <div class="guide-icon">👇</div>
-        <strong>여기를 터치하세요</strong>
-        <span>여러 손가락을 올려두면 자동으로 추첨이 시작됩니다.</span>
+      <div v-if="touchPoints.length === 0 && !winner" class="empty-guide">
+        <div class="empty-icon">👇</div>
+        <div class="empty-title">여기를 터치하세요</div>
       </div>
-
       <div
         v-for="point in touchPoints"
         :key="point.id"
@@ -71,10 +58,6 @@
         <span>이 아이콘의 주인공이 당첨입니다.</span>
       </div>
     </div>
-
-    <p class="hint">
-      PC에서는 마우스로 테스트할 수 있지만, 실제 멀티 터치는 모바일/태블릿 터치 화면에서 가장 잘 동작합니다.
-    </p>
   </div>
 </template>
 
@@ -82,6 +65,7 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 
 const pickDelaySeconds = 3
+const minPlayersToStart = 2
 const playAreaRef = ref(null)
 const touchPoints = ref([])
 const winner = ref(null)
@@ -106,8 +90,9 @@ const colors = [
 const statusText = computed(() => {
   if (winner.value) return '당첨 완료'
   if (isPicking.value) return '추첨 중'
-  if (touchPoints.value.length > 0) return '대기 중'
-  return '준비'
+  if (touchPoints.value.length === 1) return '1명 더 필요'
+  if (touchPoints.value.length >= minPlayersToStart) return '준비 완료'
+  return '대기 중'
 })
 
 const countdownText = computed(() => {
@@ -136,7 +121,7 @@ function handlePointerDown(event) {
     })
   }
 
-  if (!isPicking.value) startPicking()
+  syncPickingState()
 }
 
 function handlePointerMove(event) {
@@ -154,8 +139,16 @@ function handlePointerUp(event) {
   if (winner.value) return
 
   touchPoints.value = touchPoints.value.filter((point) => point.id !== event.pointerId)
+  syncPickingState()
+}
 
-  if (touchPoints.value.length === 0) {
+function syncPickingState() {
+  if (touchPoints.value.length >= minPlayersToStart && !isPicking.value) {
+    startPicking()
+    return
+  }
+
+  if (touchPoints.value.length < minPlayersToStart && isPicking.value) {
     clearTimers()
     isPicking.value = false
     remainingMs.value = 0
@@ -183,7 +176,7 @@ function pickWinner() {
   isPicking.value = false
   remainingMs.value = 0
 
-  if (touchPoints.value.length === 0) return
+  if (touchPoints.value.length < minPlayersToStart) return
 
   const randomIndex = Math.floor(Math.random() * touchPoints.value.length)
   winner.value = { ...touchPoints.value[randomIndex] }
@@ -213,40 +206,41 @@ onBeforeUnmount(() => {
 .touch-winner-game {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   color: #e5e7eb;
 }
 
-.top-panel {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 14px;
-  background: rgba(15, 23, 42, 0.72);
+.status-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 8px;
+  align-items: stretch;
 }
 
-.top-panel h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
+.status-item {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 12px;
+  padding: 9px 10px;
 }
 
-.top-panel p {
-  margin: 6px 0 0;
+.label {
+  display: block;
+  margin-bottom: 3px;
   color: #94a3b8;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 11px;
+}
+
+.status-item strong {
+  font-size: 16px;
 }
 
 .reset-btn {
   border: 1px solid rgba(148, 163, 184, 0.22);
   background: #0f172a;
   color: #e5e7eb;
-  border-radius: 10px;
-  padding: 8px 10px;
+  border-radius: 12px;
+  padding: 0 14px;
   cursor: pointer;
   font-weight: 800;
   white-space: nowrap;
@@ -256,33 +250,9 @@ onBeforeUnmount(() => {
   border-color: rgba(96, 165, 250, 0.42);
 }
 
-.status-panel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.status-item {
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(255, 255, 255, 0.035);
-  border-radius: 12px;
-  padding: 10px;
-}
-
-.label {
-  display: block;
-  margin-bottom: 4px;
-  color: #94a3b8;
-  font-size: 12px;
-}
-
-.status-item strong {
-  font-size: 17px;
-}
-
 .play-area {
   position: relative;
-  min-height: 430px;
+  min-height: 390px;
   overflow: hidden;
   border-radius: 18px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -309,20 +279,18 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  color: #cbd5e1;
-  text-align: center;
-  padding: 24px;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.7);
   pointer-events: none;
 }
 
-.guide-icon {
-  font-size: 46px;
+.empty-icon {
+  font-size: 34px;
 }
 
-.empty-guide span {
-  color: #94a3b8;
-  font-size: 13px;
+.empty-title {
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .touch-marker {
@@ -408,13 +376,6 @@ onBeforeUnmount(() => {
   font-size: 13px;
 }
 
-.hint {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
 @keyframes pop {
   from {
     opacity: 0;
@@ -442,20 +403,17 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 640px) {
-  .top-panel {
-    flex-direction: column;
+  .status-panel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .reset-btn {
-    width: 100%;
-  }
-
-  .status-panel {
-    grid-template-columns: 1fr;
+    grid-column: 1 / -1;
+    min-height: 38px;
   }
 
   .play-area {
-    min-height: 55vh;
+    min-height: 50vh;
   }
 }
 </style>
