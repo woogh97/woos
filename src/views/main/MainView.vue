@@ -86,6 +86,7 @@
 // 예: import TeamSplitGame from '@/components/games/TeamSplitGame.vue'
 import { shallowRef } from 'vue'
 import TeamSplitter from '../team-split-game/TeamSplitter.vue';
+import TouchWinnerGame from '../touch-winner-game/TouchWinnerGame.vue';
 
 const selectedGame = shallowRef(null)
 
@@ -102,6 +103,19 @@ const games = shallowRef([
       'linear-gradient(135deg, rgba(59,130,246,0.25), rgba(16,185,129,0.22))',
     enabled: true,
     component: TeamSplitter,
+  },
+  {
+    id: 'touch-winner',
+    name: '터치 당첨',
+    summary: '여러 명이 동시에 터치하면 3초 뒤 한 명을 랜덤으로 뽑는 게임',
+    icon: '👇',
+    badge: '신규',
+    playerText: '2명 이상',
+    playTime: '10초',
+    thumbnailBg:
+      'linear-gradient(135deg, rgba(244,114,182,0.25), rgba(250,204,21,0.2))',
+    enabled: true,
+    component: TouchWinnerGame,
   }
 ])
 
