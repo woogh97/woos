@@ -94,20 +94,61 @@
       </div>
 
       <div v-if="showFanfare" class="fanfare-layer">
-        <span
-          v-for="piece in fanfarePieces"
-          :key="piece.id"
-          class="confetti-piece"
-          :style="{
-            '--x': `${piece.x}%`,
-            '--dx': `${piece.dx}px`,
-            '--delay': `${piece.delay}ms`,
-            '--duration': `${piece.duration}ms`,
-            '--size': `${piece.size}px`,
-            '--rotate': `${piece.rotate}deg`,
-            '--hue': piece.hue,
-          }"
-        />
+        <template v-for="piece in fanfarePieces" :key="piece.id">
+          <svg
+            v-if="piece.shape === 'curl'"
+            class="confetti-piece confetti-curl"
+            viewBox="0 0 32 96"
+            :style="{
+              '--x': `${piece.x}%`,
+              '--delay': `${piece.delay}ms`,
+              '--start-y': `${piece.startY}px`,
+              '--drift-a': `${piece.driftA}px`,
+              '--drift-b': `${piece.driftB}px`,
+              '--drift-c': `${piece.driftC}px`,
+              '--end-y': `${piece.endY}vh`,
+              '--duration': `${piece.duration}ms`,
+              '--size': `${piece.size}px`,
+              '--rotate-start': `${piece.rotateStart}deg`,
+              '--rotate-mid': `${piece.rotateMid}deg`,
+              '--rotate-end': `${piece.rotateEnd}deg`,
+              '--scale': piece.scale,
+              '--piece-opacity': piece.opacity,
+              '--hue': piece.hue,
+            }"
+          >
+            <path
+              d="M16 4
+                C4 12, 4 24, 16 32
+                C28 40, 28 52, 16 60
+                C4 68, 4 80, 16 92"
+            />
+          </svg>
+
+          <span
+            v-else
+            class="confetti-piece"
+            :data-shape="piece.shape"
+            :style="{
+              '--x': `${piece.x}%`,
+              '--delay': `${piece.delay}ms`,
+              '--start-y': `${piece.startY}px`,
+              '--drift-a': `${piece.driftA}px`,
+              '--drift-b': `${piece.driftB}px`,
+              '--drift-c': `${piece.driftC}px`,
+              '--end-y': `${piece.endY}vh`,
+              '--duration': `${piece.duration}ms`,
+              '--size': `${piece.size}px`,
+              '--rotate-start': `${piece.rotateStart}deg`,
+              '--rotate-mid': `${piece.rotateMid}deg`,
+              '--rotate-end': `${piece.rotateEnd}deg`,
+              '--scale': piece.scale,
+              '--piece-opacity': piece.opacity,
+              '--radius': `${piece.radius}px`,
+              '--hue': piece.hue,
+            }"
+          />
+        </template>
       </div>
 
       <div v-if="winner" class="winner-banner">
@@ -139,6 +180,7 @@ const fanfarePieces = ref([])
 let pickTimer = null
 let countdownTimer = null
 let burstTimer = null
+let fanfareTimer = null
 let lastCountdownSecond = null
 
 const icons = ['🍀', '⭐', '🔥', '💎', '🎯', '👑', '🚀', '🍭', '🎲', '✨']
@@ -277,10 +319,13 @@ function pickWinner() {
 
   burstTimer = window.setTimeout(() => {
     showBurst.value = false
-    showFanfare.value = false
     particles.value = []
+  }, 1100)
+
+  fanfareTimer = window.setTimeout(() => {
+    showFanfare.value = false
     fanfarePieces.value = []
-  }, 1800)
+  }, 6200)
 }
 
 function createParticles() {
@@ -299,17 +344,86 @@ function createParticles() {
   })
 }
 
+function randomConfettiShape() {
+  const pool = [
+    'rect',
+    'rect',
+    'rect',
+    'circle',
+    'pill',
+    'pill',
+    'star',
+    'triangle',
+    'diamond',
+    'curl',
+  ]
+
+  return pool[Math.floor(Math.random() * pool.length)]
+}
+
 function createFanfarePieces() {
-  return Array.from({ length: 54 }, (_, index) => ({
-    id: index,
-    x: Math.random() * 100,
-    dx: -90 + Math.random() * 180,
-    delay: Math.random() * 260,
-    duration: 950 + Math.random() * 620,
-    size: 6 + Math.random() * 9,
-    rotate: -260 + Math.random() * 520,
-    hue: Math.random() * 360,
-  }))
+  const count = 104
+  const columns = 13
+
+  return Array.from({ length: count }, (_, index) => {
+    const shape = randomConfettiShape()
+    const isCurl = shape === 'curl'
+
+    const direction = Math.random() > 0.5 ? 1 : -1
+    const column = index % columns
+    const columnWidth = 100 / columns
+
+    const x =
+      column * columnWidth +
+      columnWidth * 0.18 +
+      Math.random() * columnWidth * 0.64
+
+    const row = Math.floor(index / columns)
+    const stagger = row * 85 + Math.random() * 430
+
+    return {
+      id: index,
+      shape,
+
+      x,
+      startY: -40 - Math.random() * 170,
+
+      driftA: direction * (isCurl ? 16 + Math.random() * 32 : 12 + Math.random() * 56),
+      driftB: -direction * (isCurl ? 18 + Math.random() * 36 : 14 + Math.random() * 64),
+      driftC: direction * (isCurl ? -36 + Math.random() * 72 : -50 + Math.random() * 100),
+
+      endY: 112 + Math.random() * 24,
+      delay: stagger,
+
+      duration: isCurl
+        ? 4200 + Math.random() * 1400
+        : 3400 + Math.random() * 2300,
+
+      size: isCurl
+        ? 14 + Math.random() * 8
+        : 5 + Math.random() * 11,
+
+      rotateStart: isCurl
+        ? -40 + Math.random() * 80
+        : -120 + Math.random() * 240,
+
+      rotateMid: isCurl
+        ? -140 + Math.random() * 280
+        : -480 + Math.random() * 960,
+
+      rotateEnd: isCurl
+        ? -260 + Math.random() * 520
+        : -1080 + Math.random() * 2160,
+
+      scale: isCurl
+        ? 0.9 + Math.random() * 0.35
+        : 0.72 + Math.random() * 0.58,
+
+      opacity: 0.72 + Math.random() * 0.28,
+      hue: Math.random() * 360,
+      radius: Math.random() > 0.74 ? 999 : 3 + Math.random() * 5,
+    }
+  }).sort(() => Math.random() - 0.5)
 }
 
 function toggleVibration() {
@@ -339,9 +453,12 @@ function clearTimers() {
   if (pickTimer) window.clearTimeout(pickTimer)
   if (countdownTimer) window.clearInterval(countdownTimer)
   if (burstTimer) window.clearTimeout(burstTimer)
+  if (fanfareTimer) window.clearTimeout(fanfareTimer)
+
   pickTimer = null
   countdownTimer = null
   burstTimer = null
+  fanfareTimer = null
   lastCountdownSecond = null
 }
 
@@ -677,26 +794,93 @@ onBeforeUnmount(() => {
 
 .confetti-piece {
   position: absolute;
-  top: -18px;
+  top: 0;
   left: var(--x);
   width: var(--size);
   height: calc(var(--size) * 1.45);
-  border-radius: 3px;
+  border-radius: var(--radius);
   background: hsl(var(--hue), 88%, 64%);
-  box-shadow: 0 0 12px hsla(var(--hue), 88%, 64%, 0.35);
+  box-shadow: 0 0 12px hsla(var(--hue), 88%, 64%, 0.3);
   opacity: 0;
-  transform: translateY(-20px) rotate(0deg);
-  animation: confettiFall var(--duration) cubic-bezier(0.18, 0.78, 0.28, 1) forwards;
+  transform:
+    translateY(var(--start-y))
+    translateX(0)
+    rotate(var(--rotate-start))
+    scale(var(--scale));
+  animation: confettiDrift var(--duration) linear forwards;
   animation-delay: var(--delay);
 }
 
-.confetti-piece:nth-child(3n) {
+.confetti-piece[data-shape='rect'] {
+  width: calc(var(--size) * 1.4);
+  height: calc(var(--size) * 0.7);
+  border-radius: 3px;
+}
+
+.confetti-piece[data-shape='circle'] {
+  width: var(--size);
+  height: var(--size);
   border-radius: 999px;
 }
 
-.confetti-piece:nth-child(4n) {
-  width: calc(var(--size) * 1.5);
-  height: calc(var(--size) * 0.58);
+.confetti-piece[data-shape='pill'] {
+  width: calc(var(--size) * 1.8);
+  height: calc(var(--size) * 0.65);
+  border-radius: 999px;
+}
+
+.confetti-piece[data-shape='diamond'] {
+  width: var(--size);
+  height: var(--size);
+  border-radius: 2px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.confetti-piece[data-shape='triangle'] {
+  width: calc(var(--size) * 1.2);
+  height: calc(var(--size) * 1.1);
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.confetti-piece[data-shape='star'] {
+  width: calc(var(--size) * 1.45);
+  height: calc(var(--size) * 1.45);
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
+.confetti-curl {
+  width: calc(var(--size) * 0.75);
+  height: calc(var(--size) * 3.2);
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.confetti-curl path {
+  fill: none;
+  stroke: hsl(var(--hue), 88%, 64%);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px hsla(var(--hue), 88%, 64%, 0.24));
+}
+
+.confetti-piece:nth-child(7n) {
+  filter: blur(0.2px);
 }
 
 .winner-banner {
@@ -824,17 +1008,52 @@ onBeforeUnmount(() => {
   }
 }
 
-@keyframes confettiFall {
+@keyframes confettiDrift {
   0% {
     opacity: 0;
-    transform: translateY(-24px) translateX(0) rotate(0deg);
+    transform:
+      translateY(var(--start-y))
+      translateX(0)
+      rotate(var(--rotate-start))
+      scale(var(--scale));
   }
-  12% {
-    opacity: 1;
+
+  8% {
+    opacity: var(--piece-opacity);
   }
+
+  25% {
+    transform:
+      translateY(24vh)
+      translateX(var(--drift-a))
+      rotate(calc(var(--rotate-mid) * 0.25))
+      scale(var(--scale));
+  }
+
+  50% {
+    transform:
+      translateY(52vh)
+      translateX(var(--drift-b))
+      rotate(calc(var(--rotate-mid) * 0.58))
+      scale(var(--scale));
+  }
+
+  75% {
+    opacity: calc(var(--piece-opacity) * 0.86);
+    transform:
+      translateY(82vh)
+      translateX(calc(var(--drift-a) * 0.3 + var(--drift-c) * 0.5))
+      rotate(calc(var(--rotate-end) * 0.82))
+      scale(var(--scale));
+  }
+
   100% {
     opacity: 0;
-    transform: translateY(112vh) translateX(var(--dx)) rotate(var(--rotate));
+    transform:
+      translateY(var(--end-y))
+      translateX(var(--drift-c))
+      rotate(var(--rotate-end))
+      scale(calc(var(--scale) * 0.82));
   }
 }
 
