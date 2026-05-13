@@ -150,12 +150,6 @@
           />
         </template>
       </div>
-
-      <div v-if="winner" class="winner-banner">
-        <div class="winner-icon">{{ winner.icon }}</div>
-        <strong>당첨!</strong>
-        <span>이 아이콘의 주인공이 당첨입니다.</span>
-      </div>
     </div>
   </div>
 </template>
@@ -883,46 +877,6 @@ onBeforeUnmount(() => {
   filter: blur(0.2px);
 }
 
-.winner-banner {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  z-index: 7;
-  transform: translateX(-50%);
-  min-width: 214px;
-  border: 1px solid rgba(250, 204, 21, 0.34);
-  background:
-    linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.88));
-  border-radius: 18px;
-  padding: 14px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-  box-shadow:
-    0 18px 42px rgba(0, 0, 0, 0.36),
-    0 0 36px rgba(250, 204, 21, 0.1);
-  backdrop-filter: blur(12px);
-  pointer-events: none;
-  animation: bannerUp 0.34s ease-out;
-}
-
-.winner-icon {
-  font-size: 34px;
-}
-
-.winner-banner strong {
-  color: #fde68a;
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.winner-banner span {
-  color: #cbd5e1;
-  font-size: 13px;
-}
-
 @keyframes pop {
   from {
     opacity: 0;
@@ -1075,17 +1029,6 @@ onBeforeUnmount(() => {
   }
   100% {
     transform: scale(1);
-  }
-}
-
-@keyframes bannerUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(12px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
